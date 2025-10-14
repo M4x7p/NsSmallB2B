@@ -4,10 +4,527 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NS Small B2B · DoHome</title>
+
+  <!-- ฟอนต์ + ธีม -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- โหลด Google Maps JS API (ใช้คีย์เดียวกับ Geocode/Distance) -->
+  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDheFpt9gmMH_6Rb3vEKihQZTw2GvZ5NbA&v=weekly"></script>
+
   <link rel="icon" href="assets/dohome_logo.jpg">
+  <style>
+    :root{
+      --orange:#f37021; --orange-600:#f37021; --orange-700:#dd5f14;
+      --bg:#fff9f5; --ink:#18212f; --muted:#64748b;
+      --card:#ffffff; --border:#f0e3da; --radius:16px; --chip:#fff1e7;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.35}
+    .wrap{max-width:1000px;margin:20px auto 64px;padding:0 14px}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .brand img{width:56px;height:56px;object-fit:contain;border-radius:12px;background:#fff;border:1px solid var(--border)}
+    h1{font-size:26px;margin:0}
+    .tag{color:var(--muted);font-size:14px}
+    .ribbon{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#ffe8da;color:#9a3f12;border:1px dashed #ffc7a6;font-size:13px;font-weight:600}
+    .grid4{display:grid;gap:12px;grid-template-columns:1fr}
+    @media(min-width:760px){.grid4{grid-template-columns:1fr 1fr}}
+    @media(min-width:980px){.grid4{grid-template-columns:1fr 1fr 1fr 1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(243,112,33,.10);display:flex;align-items:center;justify-content:center;text-align:center;gap:10px;cursor:pointer;font-weight:700}
+    .card:active{transform:translateY(1px)}
+    .hidden{display:none}
+    .section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(243,112,33,.10);margin-top:14px}
+    .row{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+    @media(min-width:720px){.row.cols-2{grid-template-columns:1fr 1fr} .row.cols-3{grid-template-columns:1fr 1fr 1fr}}
+    label{font-weight:600;font-size:14px;display:block;margin-bottom:6px}
+    input[type="text"],input[type="date"],input[type="tel"],textarea,select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fff;font-size:15px;outline:none;transition:border .15s ease,box-shadow .15s ease}
+    textarea{min-height:110px;resize:vertical}
+    input:focus,textarea:focus,select:focus{border-color:var(--orange-600);box-shadow:0 0 0 3px rgba(243,112,33,.18)}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#fff;cursor:pointer;font-weight:600}
+    button.primary{width:100%;padding:14px 16px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--orange-600),var(--orange-700));color:#fff;font-weight:700;font-size:16px;cursor:pointer}
+    .status{margin-top:12px;font-size:14px}.success{color:#0f766e}.error{color:#b91c1c}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;padding:10px;border:1px solid var(--border);border-radius:12px;background:#fff;min-height:46px;cursor:text}
+    .chip{display:inline-flex;align-items:center;gap:6px;background:var(--chip);border:1px solid #ffd6bf;padding:6px 10px;border-radius:999px;font-size:13px;font-weight:600}
+    .chip button{all:unset;cursor:pointer;font-weight:700}
+    .chip-input{border:none;outline:none;min-width:120px;font-size:15px;padding:6px}
+    .hint{color:var(--muted);font-size:12px;margin-top:4px}
+    #map{width:100%;height:520px;border-radius:12px;border:1px solid var(--border)}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+    .menu-title{display:flex;align-items:center;gap:10px;margin:4px 0 10px;font-weight:700}
+    .back{font-size:14px;cursor:pointer;color:#9a3f12}
+  </style>
 </head>
 <body>
-  <h2>NS Small B2B · DoHome</h2>
-  <p>ไฟล์โค้ดเต็มอยู่ในข้อความก่อนหน้า ให้นำมาแทนที่เนื้อหาใน index.html นี้</p>
+<div class="wrap">
+  <header>
+    <div class="brand"><img src="assets/dohome_logo.jpg" alt="DoHome logo"></div>
+    <div>
+      <h1>NS Small B2B <span class="tag">· ฟอร์มออกหาลูกค้า 🧭✨</span></h1>
+      <div class="ribbon">เมนูใหญ่ 4 ฟังก์ชัน · DoHome Theme · ฟอนต์ Prompt</div>
+    </div>
+  </header>
+
+  <!-- เมนูหลัก 4 ปุ่ม -->
+  <div id="home" class="grid4">
+    <div class="card" onclick="openSection('mapSec')">🗺️ แผนที่ลูกค้า</div>
+    <div class="card" onclick="openSection('dashSec')">📊 Dashboard</div>
+    <div class="card" onclick="openSection('lineSec')">💬 สมัครสมาชิก (LINE)</div>
+    <div class="card" onclick="openSection('formSec')">📝 กรอกฟอร์มออกหาลูกค้า</div>
+  </div>
+
+  <!-- SECTION: แผนที่ลูกค้า -->
+  <section id="mapSec" class="section hidden">
+    <div class="menu-title">
+      <span class="back" onclick="backHome()">← กลับ</span> 🗺️ แผนที่ลูกค้า
+    </div>
+    <div class="row cols-3">
+      <div>
+        <label>📅 วันที่ (กรองจากข้อมูลถ้ามี)</label>
+        <input type="date" id="mapFrom"> 
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <input type="date" id="mapTo">
+      </div>
+      <div>
+        <label>👥 Team</label>
+        <select id="mapTeam"><option value="">ทั้งหมด</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+      </div>
+    </div>
+    <div class="controls" style="margin-bottom:8px">
+      <button class="btn" onclick="refreshMap()">🔄 โหลดข้อมูล/รีเฟรช</button>
+      <button class="btn" onclick="locateOnMap()">📌 แสดงตำแหน่งปัจจุบันบนแผนที่</button>
+    </div>
+    <div id="map"></div>
+    <div class="hint">* สามารถชี้ marker เพื่อดูรายละเอียดหน้างาน, ชื่อลูกค้า, ทีม, วันที่</div>
+  </section>
+
+  <!-- SECTION: Dashboard -->
+  <section id="dashSec" class="section hidden">
+    <div class="menu-title">
+      <span class="back" onclick="backHome()">← กลับ</span> 📊 Dashboard สรุปจำนวนครั้งตาม จ./อ./ต.
+    </div>
+    <div class="row cols-3">
+      <div>
+        <label>จังหวัด</label>
+        <select id="filterChangwat"><option value="">ทั้งหมด</option></select>
+      </div>
+      <div>
+        <label>อำเภอ</label>
+        <select id="filterAmphoe"><option value="">ทั้งหมด</option></select>
+      </div>
+      <div>
+        <label>ตำบล</label>
+        <select id="filterTambon"><option value="">ทั้งหมด</option></select>
+      </div>
+    </div>
+    <div class="controls" style="margin-bottom:8px">
+      <button class="btn" onclick="refreshDashboard()">🔄 คำนวณใหม่</button>
+    </div>
+    <div id="dashSummary" style="margin:8px 0;font-weight:700">—</div>
+    <table id="dashTable">
+      <thead><tr><th>จังหวัด</th><th>อำเภอ</th><th>ตำบล</th><th>จำนวนครั้ง</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="hint">* กรองทีละชั้นได้ตามต้องการ แล้วดูผลรวม/ตารางด้านบน</div>
+  </section>
+
+  <!-- SECTION: สมัครสมาชิก (LINE QR) -->
+  <section id="lineSec" class="section hidden" style="text-align:center">
+    <div class="menu-title">
+      <span class="back" onclick="backHome()">← กลับ</span> 💬 สมัครสมาชิก (เพิ่มเพื่อน LINE)
+    </div>
+    <img id="lineQR" src="" alt="LINE QR" style="max-width:360px;width:100%;border-radius:12px;border:1px solid var(--border);background:#fff"/>
+    <div class="hint" style="margin-top:8px">สแกน QR เพื่อเพิ่มเพื่อน LINE</div>
+  </section>
+
+  <!-- SECTION: ฟอร์ม -->
+  <section id="formSec" class="section hidden">
+    <div class="menu-title">
+      <span class="back" onclick="backHome()">← กลับ</span> 📝 กรอกฟอร์มออกหาลูกค้า
+    </div>
+    <form id="visitForm">
+      <div class="row cols-3">
+        <div>
+          <label>📅 วันที่ <span style="color:#ef4444">*</span></label>
+          <input type="date" id="date" required />
+        </div>
+        <div>
+          <label>👥 Team <span style="color:#ef4444">*</span></label>
+          <select id="team" required><option value="">เลือกทีม</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+        </div>
+        <div>
+          <label>🧑‍💼 ชื่อพนักงาน (หลายคน)</label>
+          <div id="staffChips" class="chips"><input id="chipInput" class="chip-input" type="text" placeholder="พิมพ์ชื่อแล้ว Enter/,"></div>
+          <div class="hint">เพิ่มได้หลายคน: พิมพ์ชื่อแล้วกด Enter หรือคอมมา ,</div>
+        </div>
+      </div>
+
+      <div class="row cols-3">
+        <div><label>📍 หน้างาน</label><input type="text" id="siteName" placeholder="เช่น โครงการบ้าน ABC"></div>
+        <div><label>🧾 ชื่อลูกค้า</label><input type="text" id="customerName" placeholder="ชื่อร้าน/ผู้ติดต่อ"></div>
+        <div><label>📱 เบอร์โทร</label><input type="tel" id="phone" placeholder="0XXXXXXXXX"></div>
+      </div>
+
+      <div class="row cols-2">
+        <div>
+          <label>🏢 ประเภทธุรกิจ <span style="color:#ef4444">*</span></label>
+          <select id="businessType" required>
+            <option value="">เลือกประเภทธุรกิจ</option>
+            <option>ร้านค้าช่วง-ร้านวัสดุก่อสร้าง</option>
+            <option>ร้านค้าช่วง-ร้านวัสดุอื่นๆ</option>
+            <option>ผู้รับเหมาบุคคลธรรมดา เช่น โครงการบ้านจัดสรร</option>
+            <option>ผู้รับเหมานิติบุคล</option>
+            <option>หน่วยงานราชการ (รวมสถานศึกษา)</option>
+            <option>โรงแรม รีสอร์ท อพาร์ทเม้นต์</option>
+            <option>วัด/มูลนิธิ</option>
+            <option>นิติบุคคล(ธุระกิจประเภททั่วไป)/เจ้าของกิจการ</option>
+            <option>บุคคลธรรมดา</option>
+            <option>โรงงาน</option>
+            <option>ร้านอาหาร คาเฟ่</option>
+          </select>
+        </div>
+        <div>
+          <label>🧰 สินค้าที่ใช้</label>
+          <select id="productType">
+            <option value="">เลือกสินค้า</option>
+            <option>เครื่องมือช่าง</option><option>ฮาร์ดแวร์</option><option>เกษตรสวน-ประปา/ปั้มน้ำ</option>
+            <option>ประตู-หน้าต่าง/ลูกบิด</option><option>สีและเคมีภัณฑ์/คิ้วไม้</option><option>เครื่องเขียน/กิ๊ฟช็อป</option>
+            <option>เครื่องใช้ไฟฟ้า</option><option>เครื่องครัวบานซิงค์</option><option>เครื่องใช้ภายในบ้าน</option>
+            <option>เฟอร์นิเจอร์/เครื่องนอน</option><option>สุขภัณฑ์/กระเบื้อง</option><option>อุปกรณ์ไฟฟ้า/โคมไฟตกแต่ง</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row cols-3">
+        <div><label>💸 ยอดขายประมาณการณ์</label><input type="text" id="estRevenue" placeholder="เช่น 50,000"></div>
+        <div><label>🏪 ร้านค้าที่ซื้อสินค้าอยู่ปัจจุบัน</label><input type="text" id="currentSupplier" placeholder="เช่น DoHome, ร้าน A"></div>
+        <div><label>📝 รายละเอียดการเข้าพบ</label><input type="text" id="visitDetails" placeholder="ประเด็น, โอกาส, ปัญหา..."></div>
+      </div>
+
+      <div class="row cols-3">
+        <div>
+          <label>🧭 พิกัด Latitude:Longitude</label>
+          <input type="text" id="latlng" placeholder="13.7563:100.5018">
+          <div class="hint">กดปุ่มด้านล่างเพื่อดึงตำแหน่งอัตโนมัติ</div>
+        </div>
+        <div>
+          <label>📏 ระยะทางจากศูนย์ (กม.)</label>
+          <input type="text" id="distanceKm" placeholder="—" readonly>
+          <div class="hint">คำนวณจาก (15.7053493,100.053933)</div>
+        </div>
+        <div>
+          <label>🗺️ ตำบล / อำเภอ / จังหวัด</label>
+          <input type="text" id="thaiAddress" placeholder="ตำบล, อำเภอ, จังหวัด">
+        </div>
+      </div>
+
+      <div class="controls" style="margin-bottom:14px">
+        <button class="btn" type="button" id="btnLocate">📌 ดึงตำแหน่งที่ตั้งปัจจุบัน</button>
+        <button class="btn" type="button" id="btnReverse">🔎 แปลงพิกัดเป็นที่อยู่</button>
+        <button class="btn" type="button" id="btnDistance">📐 คำนวณระยะทาง (ถนน)</button>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>🖼️ รูปภาพหน้างาน (สูงสุด 4 รูป)</label>
+          <input type="file" id="photos" accept="image/*" multiple>
+          <div class="hint">จะถูกแปลงเป็น Base64 เพื่อส่งต่อ</div>
+        </div>
+      </div>
+
+      <button class="primary" type="submit">🚀 ส่งข้อมูล</button>
+      <div class="status" id="status"></div>
+      <div class="hint" style="margin-top:8px">* ส่งเข้า Excel Online ผ่าน Power Automate</div>
+    </form>
+  </section>
+</div>
+
+<script>
+/** ====== CONFIG (แก้เฉพาะตรงนี้) ====== **/
+const GOOGLE_API_KEY = "AIzaSyDheFpt9gmMH_6Rb3vEKihQZTw2GvZ5NbA"; // คีย์ที่เปิด Maps JS + Geocoding + Distance Matrix
+const FLOW_URL = "PUT-YOUR-POWER-AUTOMATE-HTTP-POST-URL-HERE"; // URL Flow รับบันทึกฟอร์ม
+const DATA_URL = "https://dohomegroup-my.sharepoint.com/:x:/r/personal/d1-ns_dohome_co_th/_layouts/15/Doc.aspx?sourcedoc=%7BF10C79ED-F689-4D26-92F1-E33E46CFFD9F%7D&file=Small%20B2B.xlsx&action=default&mobileredirect=true";  // (ตัวเลือก) ใส่ลิงก์ JSON/CSV รวมข้อมูลที่เคยบันทึก (สำหรับแผนที่/แดชบอร์ด)
+const LINE_QR_URL = "assets/line_qr.png"; // รูป QR LINE ของคุณ (อัปโหลดใส่ assets/ หรือใช้ลิงก์ภาพตรง)
+
+/** ====== ธีม/ค่าเริ่มต้น ====== **/
+const ORIGIN = { lat: 15.7053493, lng: 100.053933 };
+document.getElementById('lineQR').src = LINE_QR_URL;
+(() => { const d=new Date(); const tz=d.getTimezoneOffset()*60000; const today=new Date(Date.now()-tz).toISOString().slice(0,10); const el=document.getElementById('date'); if(el) el.value=today; })();
+
+/** ====== เมนู/เนวิเกชัน ====== **/
+function openSection(id){
+  document.getElementById('home').classList.add('hidden');
+  ['mapSec','dashSec','lineSec','formSec'].forEach(k=>document.getElementById(k).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  if(id==='mapSec'){ initMapOnce(); refreshMap(); }
+  if(id==='dashSec'){ loadData().then(buildFilters).then(refreshDashboard).catch(console.warn); }
+}
+function backHome(){
+  ['mapSec','dashSec','lineSec','formSec'].forEach(k=>document.getElementById(k).classList.add('hidden'));
+  document.getElementById('home').classList.remove('hidden');
+}
+
+/** ====== MULTI STAFF (ชิป) ====== **/
+const staffChips = document.getElementById('staffChips');
+const chipInput = document.getElementById('chipInput');
+let staffList = [];
+function addChip(text){
+  const name = (text||'').trim(); if(!name) return;
+  if(staffList.includes(name)) return;
+  staffList.push(name);
+  const chip=document.createElement('span'); chip.className='chip';
+  chip.innerHTML = name + ' <button title="ลบ">×</button>';
+  chip.querySelector('button').addEventListener('click', ()=>{ staffList = staffList.filter(n=>n!==name); chip.remove(); });
+  staffChips.insertBefore(chip, chipInput); chipInput.value='';
+}
+chipInput.addEventListener('keydown', e=>{
+  if(e.key==='Enter' || e.key===','){ e.preventDefault(); addChip(chipInput.value); }
+  else if(e.key==='Backspace' && chipInput.value==='' && staffList.length){
+    staffList.pop(); const chips=staffChips.querySelectorAll('.chip'); if(chips.length) chips[chips.length-1].remove();
+  }
+});
+staffChips?.addEventListener('click', ()=>chipInput.focus());
+
+/** ====== รูปภาพ (สูงสุด 4) ====== **/
+let photosBase64 = [];
+document.getElementById('photos')?.addEventListener('change', async (e)=>{
+  photosBase64 = [];
+  const files = Array.from(e.target.files||[]).slice(0,4);
+  for(const f of files){ photosBase64.push(await fileToDataURL(f)); }
+});
+function fileToDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+
+/** ====== ปุ่มตำแหน่ง/ที่อยู่/ถนน ====== **/
+document.getElementById('btnLocate')?.addEventListener('click', ()=>{
+  const status = document.getElementById('status');
+  if(!navigator.geolocation){ status.innerHTML='<span class="error">บราวเซอร์ไม่รองรับตำแหน่ง</span>'; return; }
+  status.textContent='กำลังดึงตำแหน่ง…';
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat=pos.coords.latitude.toFixed(7), lng=pos.coords.longitude.toFixed(7);
+    document.getElementById('latlng').value = `${lat}:${lng}`;
+    status.textContent='ได้พิกัดแล้ว ✅';
+    await reverseGeocode(); await calcDistance(); // auto ต่อเนื่อง
+  }, err=> status.innerHTML='<span class="error">ดึงตำแหน่งไม่สำเร็จ: '+err.message+'</span>', {enableHighAccuracy:true, timeout:15000});
+});
+document.getElementById('btnReverse')?.addEventListener('click', reverseGeocode);
+document.getElementById('btnDistance')?.addEventListener('click', calcDistance);
+
+async function reverseGeocode(){
+  const status=document.getElementById('status');
+  const latlng = (document.getElementById('latlng').value||'').trim();
+  if(!latlng){ status.innerHTML='<span class="error">กรุณาใส่พิกัดก่อน</span>'; return; }
+  const [lat,lng] = latlng.split(':').map(Number);
+  try{
+    const url = new URL('https://maps.googleapis.com/maps/api/geocode/json');
+    url.searchParams.set('latlng', `${lat},${lng}`); url.searchParams.set('language','th'); url.searchParams.set('key', GOOGLE_API_KEY);
+    const res=await fetch(url); const data=await res.json();
+    if(data.status!=='OK') throw new Error(data.status);
+    const comp=data.results[0]?.address_components||[];
+    const tambon = findLongName(comp,'administrative_area_level_3') || findLongName(comp,'sublocality') || '';
+    const amphoe = findLongName(comp,'administrative_area_level_2') || '';
+    const changwat = findLongName(comp,'administrative_area_level_1') || '';
+    document.getElementById('thaiAddress').value = [tambon,amphoe,changwat].filter(Boolean).join(', ');
+    status.textContent='แปลงพิกัดเป็นที่อยู่สำเร็จ ✅';
+  }catch(e){ status.innerHTML='<span class="error">Reverse geocode ล้มเหลว: '+e.message+'</span>'; }
+}
+function findLongName(components,type){ const it = components.find(c=>c.types.includes(type)); return it?it.long_name:null; }
+
+async function calcDistance(){
+  const status=document.getElementById('status');
+  const latlng=(document.getElementById('latlng').value||'').trim();
+  if(!latlng){ status.innerHTML='<span class="error">กรุณาใส่พิกัดก่อน</span>'; return; }
+  const [lat,lng] = latlng.split(':').map(Number);
+  if(!window.google || !google.maps || !google.maps.DistanceMatrixService){ status.innerHTML='<span class="error">Google Maps API ยังโหลดไม่เสร็จ</span>'; return; }
+  status.textContent='กำลังคำนวณระยะทาง (ถนน)…';
+  const svc = new google.maps.DistanceMatrixService();
+  svc.getDistanceMatrix({
+    origins: [{lat:ORIGIN.lat, lng:ORIGIN.lng}],
+    destinations: [{lat, lng}],
+    travelMode: google.maps.TravelMode.DRIVING,
+    unitSystem: google.maps.UnitSystem.METRIC
+  }, (resp, statusCode)=>{
+    if(statusCode!=='OK'){ status.innerHTML='<span class="error">ล้มเหลว: '+statusCode+'</span>'; return; }
+    const el = resp.rows?.[0]?.elements?.[0];
+    if(!el || el.status!=='OK'){ status.innerHTML='<span class="error">ไม่มีผลลัพธ์: '+(el?.status||'NO_RESULT')+'</span>'; return; }
+    document.getElementById('distanceKm').value = (el.distance.value/1000).toFixed(2);
+    status.textContent='คำนวณระยะทาง (ถนน) สำเร็จ ✅';
+  });
+}
+
+/** ====== ส่งข้อมูลไป Power Automate ====== **/
+document.getElementById('visitForm')?.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const status=document.getElementById('status'); status.textContent='กำลังส่งข้อมูล… 🚚';
+  if(staffList.length===0){ status.innerHTML='<span class="error">โปรดระบุชื่อพนักงานอย่างน้อย 1 คน</span>'; return; }
+  const payload = {
+    date: document.getElementById('date').value,
+    team: document.getElementById('team').value,
+    staffNames: staffList,
+    staffNamesText: staffList.join(', '),
+    siteName: document.getElementById('siteName').value,
+    customerName: document.getElementById('customerName').value,
+    phone: document.getElementById('phone').value,
+    businessType: document.getElementById('businessType').value,
+    productType: document.getElementById('productType').value,
+    estRevenue: document.getElementById('estRevenue').value,
+    currentSupplier: document.getElementById('currentSupplier').value,
+    visitDetails: document.getElementById('visitDetails').value,
+    latlng: document.getElementById('latlng').value,
+    distanceKm: document.getElementById('distanceKm').value,
+    thaiAddress: document.getElementById('thaiAddress').value,
+    photosBase64: photosBase64,
+    // secret แบบง่าย (ไปตั้ง Condition ตรวจใน Flow)
+    secret: "nsb2b-2025"
+  };
+  try{
+    const res = await fetch(FLOW_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    status.innerHTML='<span class="success">ส่งสำเร็จ 🎉</span>';
+    e.target.reset(); staffList=[]; staffChips.querySelectorAll('.chip').forEach(c=>c.remove()); photosBase64=[];
+    const d=new Date(), tz=d.getTimezoneOffset()*60000; document.getElementById('date').value=new Date(Date.now()-tz).toISOString().slice(0,10);
+    document.getElementById('distanceKm').value='';
+  }catch(err){ status.innerHTML='<span class="error">ส่งไม่สำเร็จ: '+err.message+'</span>'; }
+});
+
+/** ====== DATA LOADER (ใช้สำหรับแผนที่/แดชบอร์ด) ====== **/
+let cachedRecords = null;
+// รูปแบบข้อมูลที่คาดหวัง: [{date, team, staffNamesText, siteName, customerName, thaiAddress, latlng}]
+async function loadData(){
+  if(cachedRecords) return cachedRecords;
+  // 1) ถ้า DATA_URL ว่าง → ใช้ตัวอย่างในหน่วยความจำ
+  if(!DATA_URL){
+    cachedRecords = [
+      {date:'2025-10-01', team:'A', staffNamesText:'สมชาย', siteName:'บ้าน A', customerName:'ร้าน X', thaiAddress:'ตำบลบางรัก, อำเภอบางรัก, กรุงเทพมหานคร', latlng:'13.736717:100.523186'},
+      {date:'2025-10-03', team:'B', staffNamesText:'วิชา', siteName:'โครงการ B', customerName:'บริษัท Y', thaiAddress:'ตำบลศาลายา, อำเภอพุทธมณฑล, นครปฐม', latlng:'13.803:100.327'},
+      {date:'2025-10-05', team:'C', staffNamesText:'กานต์', siteName:'รีสอร์ท C', customerName:'คุณ Z', thaiAddress:'ตำบลหัวหิน, อำเภอหัวหิน, ประจวบคีรีขันธ์', latlng:'12.568:99.957'}
+    ];
+    return cachedRecords;
+  }
+  // 2) ถ้า DATA_URL ชี้ CSV หรือ JSON สาธารณะ
+  const res = await fetch(DATA_URL);
+  const text = await res.text();
+  try{ // JSON
+    const json = JSON.parse(text);
+    cachedRecords = Array.isArray(json) ? json : json.items || [];
+    return cachedRecords;
+  }catch(_){
+    // CSV แบบง่าย: header ต้องมี date,team,staffNamesText,siteName,customerName,thaiAddress,latlng
+    const rows = text.trim().split(/\r?\n/).map(r=>r.split(','));
+    const head = rows.shift().map(h=>h.trim());
+    cachedRecords = rows.map(r=>{
+      const o={}; head.forEach((h,i)=>o[h]= (r[i]||'').trim()); return o;
+    });
+    return cachedRecords;
+  }
+}
+
+/** ====== MAP ====== **/
+let map, markers=[], myLocationMarker=null, mapInited=false;
+function initMapOnce(){
+  if(mapInited) return;
+  mapInited=true;
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat:ORIGIN.lat, lng:ORIGIN.lng}, zoom: 7, mapTypeControl:false, streetViewControl:false
+  });
+  new google.maps.Marker({position:{lat:ORIGIN.lat,lng:ORIGIN.lng}, map, label:'🏠', title:'ศูนย์อ้างอิง'});
+}
+async function refreshMap(){
+  if(!window.google || !google.maps){ alert('Google Maps API ยังโหลดไม่เสร็จ'); return; }
+  const from = document.getElementById('mapFrom').value || '0000-01-01';
+  const to = document.getElementById('mapTo').value || '9999-12-31';
+  const team = document.getElementById('mapTeam').value || '';
+  const data = await loadData();
+  // เคลียร์ marker เก่า
+  markers.forEach(m=>m.setMap(null)); markers=[];
+  const filtered = data.filter(x=>{
+    const okDate = (!x.date || (x.date>=from && x.date<=to));
+    const okTeam = (!team || x.team===team);
+    return okDate && okTeam && x.latlng && x.latlng.includes(':');
+  });
+  const bounds = new google.maps.LatLngBounds();
+  filtered.forEach(r=>{
+    const [lat,lng] = r.latlng.split(':').map(Number);
+    const m = new google.maps.Marker({map, position:{lat,lng}});
+    const info = new google.maps.InfoWindow({content: `
+      <div style="font-size:14px"><b>${r.siteName||'-'}</b><br>
+      ลูกค้า: ${r.customerName||'-'}<br>
+      ทีม: ${r.team||'-'} · วันที่: ${r.date||'-'}<br>
+      ที่อยู่: ${r.thaiAddress||'-'}</div>`});
+    m.addListener('click', ()=>info.open({anchor:m,map}));
+    markers.push(m); bounds.extend(m.getPosition());
+  });
+  if(filtered.length){ map.fitBounds(bounds); if(map.getZoom()>15) map.setZoom(15); }
+}
+function locateOnMap(){
+  if(!navigator.geolocation){ alert('อุปกรณ์ไม่รองรับตำแหน่ง'); return; }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const p = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+    if(myLocationMarker) myLocationMarker.setMap(null);
+    myLocationMarker = new google.maps.Marker({map, position:p, label:'📍', title:'ตำแหน่งปัจจุบัน'});
+    map.setCenter(p); map.setZoom(14);
+  }, err=> alert('อ่านตำแหน่งไม่สำเร็จ: '+err.message), {enableHighAccuracy:true, timeout:10000});
+}
+
+/** ====== DASHBOARD ====== **/
+function splitThaiAddress(addr){
+  // คาดหวังรูปแบบ "ตำบล…, อำเภอ…, จังหวัด…"
+  const parts = (addr||'').split(',').map(s=>s.trim());
+  return {
+    tambon: parts[0]||'',
+    amphoe: parts[1]||'',
+    changwat: parts[2]||''
+  };
+}
+async function buildFilters(){
+  const data = await loadData();
+  // สร้างเซ็ตค่าที่ไม่ว่าง
+  const setC=new Set(), setA=new Set(), setT=new Set();
+  data.forEach(r=>{
+    const {changwat, amphoe, tambon} = splitThaiAddress(r.thaiAddress||'');
+    if(changwat) setC.add(changwat);
+    if(amphoe) setA.add(amphoe);
+    if(tambon) setT.add(tambon);
+  });
+  fillSelect('filterChangwat', setC);
+  fillSelect('filterAmphoe', setA);
+  fillSelect('filterTambon', setT);
+}
+function fillSelect(id, set){
+  const el=document.getElementById(id); const cur=el.value;
+  el.innerHTML='<option value="">ทั้งหมด</option>' + Array.from(set).sort().map(v=>`<option>${v}</option>`).join('');
+  // พยายามคงค่าที่เลือกไว้
+  if(cur && Array.from(set).includes(cur)) el.value=cur;
+}
+async function refreshDashboard(){
+  const data = await loadData();
+  const fC = document.getElementById('filterChangwat').value||'';
+  const fA = document.getElementById('filterAmphoe').value||'';
+  const fT = document.getElementById('filterTambon').value||'';
+  const filtered = data.filter(r=>{
+    const {changwat, amphoe, tambon} = splitThaiAddress(r.thaiAddress||'');
+    const okC = !fC || changwat===fC;
+    const okA = !fA || amphoe===fA;
+    const okT = !fT || tambon===fT;
+    return okC && okA && okT;
+  });
+  // สรุปจำนวนตาม จ/อ/ต (ตามฟิลด์ที่มี)
+  const agg = {};
+  filtered.forEach(r=>{
+    const {changwat, amphoe, tambon} = splitThaiAddress(r.thaiAddress||'');
+    const k = [changwat||'-', amphoe||'-', tambon||'-'].join('|');
+    agg[k] = (agg[k]||0)+1;
+  });
+  const rows = Object.entries(agg).map(([k,n])=>{
+    const [c,a,t] = k.split('|'); return {c,a,t,n};
+  }).sort((x,y)=> y.n - x.n);
+
+  document.getElementById('dashSummary').innerText = `รวม ${filtered.length} ครั้ง · กลุ่มที่เจอบ่อยสุด ${rows[0]? rows[0].c+'/'+rows[0].a+'/'+rows[0].t+' ('+rows[0].n+' ครั้ง)' : '-'}`;
+  const tbody=document.querySelector('#dashTable tbody'); tbody.innerHTML = rows.map(r=>`<tr><td>${r.c}</td><td>${r.a}</td><td>${r.t}</td><td>${r.n}</td></tr>`).join('') || '<tr><td colspan="4">ไม่มีข้อมูล</td></tr>';
+}
+</script>
 </body>
 </html>
