@@ -313,7 +313,6 @@ document.getElementById('btnLocate')?.addEventListener('click', ()=>{
 document.getElementById('btnReverse')?.addEventListener('click', reverseGeocode);
 document.getElementById('btnDistance')?.addEventListener('click', calcDistance);
 
-<script>
 async function reverseGeocode(){
   const status = document.getElementById('status');
   const latlngText = (document.getElementById('latlng').value || '').trim();
@@ -344,7 +343,7 @@ async function reverseGeocode(){
     status.textContent = 'แปลงพิกัดเป็นที่อยู่สำเร็จ ✅';
   });
 }
-</script>
+
 function findLongName(components,type){ const it = components.find(c=>c.types.includes(type)); return it?it.long_name:null; }
 
 async function calcDistance(){
