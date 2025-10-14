@@ -313,24 +313,38 @@ document.getElementById('btnLocate')?.addEventListener('click', ()=>{
 document.getElementById('btnReverse')?.addEventListener('click', reverseGeocode);
 document.getElementById('btnDistance')?.addEventListener('click', calcDistance);
 
+<script>
 async function reverseGeocode(){
-  const status=document.getElementById('status');
-  const latlng = (document.getElementById('latlng').value||'').trim();
-  if(!latlng){ status.innerHTML='<span class="error">กรุณาใส่พิกัดก่อน</span>'; return; }
-  const [lat,lng] = latlng.split(':').map(Number);
-  try{
-    const url = new URL('https://maps.googleapis.com/maps/api/geocode/json');
-    url.searchParams.set('latlng', `${lat},${lng}`); url.searchParams.set('language','th'); url.searchParams.set('key', GOOGLE_API_KEY);
-    const res=await fetch(url); const data=await res.json();
-    if(data.status!=='OK') throw new Error(data.status);
-    const comp=data.results[0]?.address_components||[];
-    const tambon = findLongName(comp,'administrative_area_level_3') || findLongName(comp,'sublocality') || '';
-    const amphoe = findLongName(comp,'administrative_area_level_2') || '';
-    const changwat = findLongName(comp,'administrative_area_level_1') || '';
-    document.getElementById('thaiAddress').value = [tambon,amphoe,changwat].filter(Boolean).join(', ');
-    status.textContent='แปลงพิกัดเป็นที่อยู่สำเร็จ ✅';
-  }catch(e){ status.innerHTML='<span class="error">Reverse geocode ล้มเหลว: '+e.message+'</span>'; }
+  const status = document.getElementById('status');
+  const latlngText = (document.getElementById('latlng').value || '').trim();
+  if(!latlngText){ status.innerHTML = '<span class="error">กรุณาใส่พิกัดก่อน</span>'; return; }
+
+  // รอให้ Maps JS โหลด
+  if(!window.google || !google.maps || !google.maps.Geocoder){
+    status.innerHTML = '<span class="error">Google Maps API ยังโหลดไม่เสร็จ</span>'; 
+    return;
+  }
+
+  const [lat, lng] = latlngText.split(':').map(Number);
+  const geocoder = new google.maps.Geocoder();
+  status.textContent = 'กำลังแปลงพิกัดเป็นที่อยู่…';
+
+  geocoder.geocode({ location: { lat, lng } }, (results, gmStatus) => {
+    if (gmStatus !== 'OK' || !results || !results.length) {
+      status.innerHTML = '<span class="error">Reverse geocode ล้มเหลว: ' + gmStatus + '</span>';
+      return;
+    }
+    // ดึงชิ้นส่วนที่อยู่แบบไทย (จะได้แม่นขึ้นถ้าผูก language=th ตอนโหลด JS, แต่ API นี้จะคืนหลายภาษาอยู่แล้ว)
+    const comp = results[0].address_components || [];
+    const find = (type) => (comp.find(c => c.types.includes(type)) || {}).long_name || '';
+    const tambon   = find('administrative_area_level_3') || find('sublocality') || '';
+    const amphoe   = find('administrative_area_level_2') || '';
+    const changwat = find('administrative_area_level_1') || '';
+    document.getElementById('thaiAddress').value = [tambon, amphoe, changwat].filter(Boolean).join(', ');
+    status.textContent = 'แปลงพิกัดเป็นที่อยู่สำเร็จ ✅';
+  });
 }
+</script>
 function findLongName(components,type){ const it = components.find(c=>c.types.includes(type)); return it?it.long_name:null; }
 
 async function calcDistance(){
