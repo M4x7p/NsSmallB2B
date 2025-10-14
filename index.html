@@ -5,20 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NS Small B2B · DoHome</title>
 
-  <!-- ฟอนต์ Prompt -->
+  <!-- ฟอนต์ + ธีม -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- โหลด Google Maps JS API (ภาษาไทย + callback) -->
-  <script async src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&v=weekly&language=th&region=TH&callback=initGmaps"></script>
+  <!-- โหลด Google Maps JS API (ใช้คีย์เดียวกับ Geocode/Distance) -->
+  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDheFpt9gmMH_6Rb3vEKihQZTw2GvZ5NbA&v=weekly"></script>
 
-  <!-- Favicon โลโก้ DoHome -->
   <link rel="icon" href="assets/dohome_logo.jpg">
-
   <style>
     :root{
-      /* DoHome-ish palette */
       --orange:#f37021; --orange-600:#f37021; --orange-700:#dd5f14;
       --bg:#fff9f5; --ink:#18212f; --muted:#64748b;
       --card:#ffffff; --border:#f0e3da; --radius:16px; --chip:#fff1e7;
@@ -65,8 +62,8 @@
   <header>
     <div class="brand"><img src="assets/dohome_logo.jpg" alt="DoHome logo"></div>
     <div>
-      <h1>NS Small B2B <span class="tag">✨</span></h1>
-      <div class="ribbon"> ดูโฮม นครสวรรค์ v.3 </div>
+      <h1>NS Small B2B <span class="tag">· ฟอร์มออกหาลูกค้า 🧭✨</span></h1>
+      <div class="ribbon">เมนูใหญ่ 4 ฟังก์ชัน · DoHome Theme · ฟอนต์ Prompt</div>
     </div>
   </header>
 
@@ -85,11 +82,11 @@
     </div>
     <div class="row cols-3">
       <div>
-        <label>📅 ตั้งแต่วันที่</label>
-        <input type="date" id="mapFrom">
+        <label>📅 วันที่ (กรองจากข้อมูลถ้ามี)</label>
+        <input type="date" id="mapFrom"> 
       </div>
       <div>
-        <label>📅 ถึงวันที่</label>
+        <label>&nbsp;</label>
         <input type="date" id="mapTo">
       </div>
       <div>
@@ -102,7 +99,7 @@
       <button class="btn" onclick="locateOnMap()">📌 แสดงตำแหน่งปัจจุบันบนแผนที่</button>
     </div>
     <div id="map"></div>
-    <div class="hint">* ชี้ marker เพื่อดูรายละเอียดหน้างาน, ลูกค้า, ทีม, วันที่</div>
+    <div class="hint">* สามารถชี้ marker เพื่อดูรายละเอียดหน้างาน, ชื่อลูกค้า, ทีม, วันที่</div>
   </section>
 
   <!-- SECTION: Dashboard -->
@@ -132,7 +129,7 @@
       <thead><tr><th>จังหวัด</th><th>อำเภอ</th><th>ตำบล</th><th>จำนวนครั้ง</th></tr></thead>
       <tbody></tbody>
     </table>
-    <div class="hint">* กรองทีละชั้น แล้วดูผลรวม/ตารางด้านบน</div>
+    <div class="hint">* กรองทีละชั้นได้ตามต้องการ แล้วดูผลรวม/ตารางด้านบน</div>
   </section>
 
   <!-- SECTION: สมัครสมาชิก (LINE QR) -->
@@ -144,7 +141,7 @@
     <div class="hint" style="margin-top:8px">สแกน QR เพื่อเพิ่มเพื่อน LINE</div>
   </section>
 
-  <!-- SECTION: ฟอร์มออกหาลูกค้า -->
+  <!-- SECTION: ฟอร์ม -->
   <section id="formSec" class="section hidden">
     <div class="menu-title">
       <span class="back" onclick="backHome()">← กลับ</span> 📝 กรอกฟอร์มออกหาลูกค้า
@@ -247,20 +244,18 @@
 </div>
 
 <script>
-/** ==================== CONFIG (แก้เฉพาะตรงนี้) ==================== **/
-const GOOGLE_API_KEY = "AIzaSyDheFpt9gmMH_6Rb3vEKihQZTw2GvZ5NbA";          // ใส่คีย์จริง (เปิด Maps JS + Geocoding + Distance Matrix)
-const FLOW_URL       = "https://default7f8918d9718a495bac9a17cba381c4.a0.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3fee42520beb4c8eb71681e16d855bc6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-4RKokdpWKN2vEnePJPmT-xg_J3SrgSeuWBzmGaXVsk"; // URL ของ Flow A
-const DATA_URL       = "https://dohomegroup-my.sharepoint.com/:x:/r/personal/d1-ns_dohome_co_th/_layouts/15/Doc.aspx?sourcedoc=%7BF10C79ED-F689-4D26-92F1-E33E46CFFD9F%7D&file=Small%20B2B.xlsx&action=default&mobileredirect=true";                              // (ตัวเลือก) ลิงก์ JSON/CSV สาธารณะ สำหรับแผนที่/แดชบอร์ด
-const LINE_QR_URL    = "assets/line_qr.png";            // อัปโหลดไฟล์นี้ไว้ใน assets/
+/** ====== CONFIG (แก้เฉพาะตรงนี้) ====== **/
+const GOOGLE_API_KEY = "AIzaSyDheFpt9gmMH_6Rb3vEKihQZTw2GvZ5NbA"; // คีย์ที่เปิด Maps JS + Geocoding + Distance Matrix
+const FLOW_URL = "https://default7f8918d9718a495bac9a17cba381c4.a0.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3fee42520beb4c8eb71681e16d855bc6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-4RKokdpWKN2vEnePJPmT-xg_J3SrgSeuWBzmGaXVsk"; // URL Flow รับบันทึกฟอร์ม
+const DATA_URL = "https://dohomegroup-my.sharepoint.com/:x:/r/personal/d1-ns_dohome_co_th/_layouts/15/Doc.aspx?sourcedoc=%7BF10C79ED-F689-4D26-92F1-E33E46CFFD9F%7D&file=Small%20B2B.xlsx&action=default&mobileredirect=true";  // (ตัวเลือก) ใส่ลิงก์ JSON/CSV รวมข้อมูลที่เคยบันทึก (สำหรับแผนที่/แดชบอร์ด)
+const LINE_QR_URL = "assets/line_qr.png"; // รูป QR LINE ของคุณ (อัปโหลดใส่ assets/ หรือใช้ลิงก์ภาพตรง)
 
-/** ==================== ค่าคงที่/ค่าเริ่มต้น ==================== **/
-const ORIGIN = { lat: 15.7053493, lng: 100.053933 };    // จุดอ้างอิง
-function initGmaps(){ window._gmapsReady = true; }      // callback ของ Google Maps
+/** ====== ธีม/ค่าเริ่มต้น ====== **/
+const ORIGIN = { lat: 15.7053493, lng: 100.053933 };
 document.getElementById('lineQR').src = LINE_QR_URL;
-// ตั้งค่า default วันที่วันนี้ (ตามเครื่อง)
-(()=>{ const d=new Date(); const tz=d.getTimezoneOffset()*60000; const today=new Date(Date.now()-tz).toISOString().slice(0,10); const el=document.getElementById('date'); if(el) el.value=today; })();
+(() => { const d=new Date(); const tz=d.getTimezoneOffset()*60000; const today=new Date(Date.now()-tz).toISOString().slice(0,10); const el=document.getElementById('date'); if(el) el.value=today; })();
 
-/** ==================== เนวิเกชัน 4 เมนู ==================== **/
+/** ====== เมนู/เนวิเกชัน ====== **/
 function openSection(id){
   document.getElementById('home').classList.add('hidden');
   ['mapSec','dashSec','lineSec','formSec'].forEach(k=>document.getElementById(k).classList.add('hidden'));
@@ -273,12 +268,12 @@ function backHome(){
   document.getElementById('home').classList.remove('hidden');
 }
 
-/** ==================== MULTI STAFF (chips) ==================== **/
+/** ====== MULTI STAFF (ชิป) ====== **/
 const staffChips = document.getElementById('staffChips');
 const chipInput = document.getElementById('chipInput');
 let staffList = [];
 function addChip(text){
-  const name=(text||'').trim(); if(!name) return;
+  const name = (text||'').trim(); if(!name) return;
   if(staffList.includes(name)) return;
   staffList.push(name);
   const chip=document.createElement('span'); chip.className='chip';
@@ -286,7 +281,7 @@ function addChip(text){
   chip.querySelector('button').addEventListener('click', ()=>{ staffList = staffList.filter(n=>n!==name); chip.remove(); });
   staffChips.insertBefore(chip, chipInput); chipInput.value='';
 }
-chipInput?.addEventListener('keydown', e=>{
+chipInput.addEventListener('keydown', e=>{
   if(e.key==='Enter' || e.key===','){ e.preventDefault(); addChip(chipInput.value); }
   else if(e.key==='Backspace' && chipInput.value==='' && staffList.length){
     staffList.pop(); const chips=staffChips.querySelectorAll('.chip'); if(chips.length) chips[chips.length-1].remove();
@@ -294,7 +289,7 @@ chipInput?.addEventListener('keydown', e=>{
 });
 staffChips?.addEventListener('click', ()=>chipInput.focus());
 
-/** ==================== รูปภาพ (สูงสุด 4) ==================== **/
+/** ====== รูปภาพ (สูงสุด 4) ====== **/
 let photosBase64 = [];
 document.getElementById('photos')?.addEventListener('change', async (e)=>{
   photosBase64 = [];
@@ -303,83 +298,69 @@ document.getElementById('photos')?.addEventListener('change', async (e)=>{
 });
 function fileToDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
 
-/** ==================== ปุ่มตำแหน่ง/ที่อยู่/ถนน ==================== **/
+/** ====== ปุ่มตำแหน่ง/ที่อยู่/ถนน ====== **/
 document.getElementById('btnLocate')?.addEventListener('click', ()=>{
-  const status=document.getElementById('status');
+  const status = document.getElementById('status');
   if(!navigator.geolocation){ status.innerHTML='<span class="error">บราวเซอร์ไม่รองรับตำแหน่ง</span>'; return; }
   status.textContent='กำลังดึงตำแหน่ง…';
   navigator.geolocation.getCurrentPosition(async pos=>{
     const lat=pos.coords.latitude.toFixed(7), lng=pos.coords.longitude.toFixed(7);
     document.getElementById('latlng').value = `${lat}:${lng}`;
     status.textContent='ได้พิกัดแล้ว ✅';
-    await reverseGeocode(); await calcDistance();
+    await reverseGeocode(); await calcDistance(); // auto ต่อเนื่อง
   }, err=> status.innerHTML='<span class="error">ดึงตำแหน่งไม่สำเร็จ: '+err.message+'</span>', {enableHighAccuracy:true, timeout:15000});
 });
 document.getElementById('btnReverse')?.addEventListener('click', reverseGeocode);
 document.getElementById('btnDistance')?.addEventListener('click', calcDistance);
 
-// ใช้ Geocoder ของ Maps JS API (ไม่โดน CORS)
 async function reverseGeocode(){
-  const status = document.getElementById('status');
-  const latlngText = (document.getElementById('latlng').value || '').trim();
-  if(!latlngText){ status.innerHTML = '<span class="error">กรุณาใส่พิกัดก่อน</span>'; return; }
-
-  // รอ Maps โหลด (สูงสุด ~5 วิ)
-  const waitUntil = Date.now()+5000;
-  while(!(window.google && google.maps && google.maps.Geocoder) && Date.now()<waitUntil){ await new Promise(r=>setTimeout(r,100)); }
-  if(!window.google || !google.maps || !google.maps.Geocoder){ status.innerHTML='<span class="error">Google Maps API ยังโหลดไม่เสร็จ</span>'; return; }
-
-  const [lat, lng] = latlngText.split(':').map(Number);
-  const geocoder = new google.maps.Geocoder();
-  status.textContent = 'กำลังแปลงพิกัดเป็นที่อยู่…';
-  geocoder.geocode({ location:{lat,lng} }, (results, gmStatus)=>{
-    if(gmStatus!=='OK' || !results || !results.length){
-      status.innerHTML='<span class="error">Reverse geocode ล้มเหลว: '+gmStatus+'</span>'; return;
-    }
-    const comp=results[0].address_components||[];
-    const find=(t)=> (comp.find(c=>c.types.includes(t))||{}).long_name||'';
-    const tambon   = find('administrative_area_level_3') || find('sublocality_level_1') || find('sublocality') || '';
-    const amphoe   = find('administrative_area_level_2') || '';
-    const changwat = find('administrative_area_level_1') || '';
-    document.getElementById('thaiAddress').value = [tambon, amphoe, changwat].filter(Boolean).join(', ');
+  const status=document.getElementById('status');
+  const latlng = (document.getElementById('latlng').value||'').trim();
+  if(!latlng){ status.innerHTML='<span class="error">กรุณาใส่พิกัดก่อน</span>'; return; }
+  const [lat,lng] = latlng.split(':').map(Number);
+  try{
+    const url = new URL('https://maps.googleapis.com/maps/api/geocode/json');
+    url.searchParams.set('latlng', `${lat},${lng}`); url.searchParams.set('language','th'); url.searchParams.set('key', GOOGLE_API_KEY);
+    const res=await fetch(url); const data=await res.json();
+    if(data.status!=='OK') throw new Error(data.status);
+    const comp=data.results[0]?.address_components||[];
+    const tambon = findLongName(comp,'administrative_area_level_3') || findLongName(comp,'sublocality') || '';
+    const amphoe = findLongName(comp,'administrative_area_level_2') || '';
+    const changwat = findLongName(comp,'administrative_area_level_1') || '';
+    document.getElementById('thaiAddress').value = [tambon,amphoe,changwat].filter(Boolean).join(', ');
     status.textContent='แปลงพิกัดเป็นที่อยู่สำเร็จ ✅';
-  });
+  }catch(e){ status.innerHTML='<span class="error">Reverse geocode ล้มเหลว: '+e.message+'</span>'; }
 }
+function findLongName(components,type){ const it = components.find(c=>c.types.includes(type)); return it?it.long_name:null; }
 
-// ใช้ Distance Matrix ของ Maps JS API (ถนนจริง)
 async function calcDistance(){
   const status=document.getElementById('status');
   const latlng=(document.getElementById('latlng').value||'').trim();
   if(!latlng){ status.innerHTML='<span class="error">กรุณาใส่พิกัดก่อน</span>'; return; }
-
-  // รอ Maps โหลด (สูงสุด ~5 วิ)
-  const waitUntil = Date.now()+5000;
-  while(!(window.google && google.maps && google.maps.DistanceMatrixService) && Date.now()<waitUntil){ await new Promise(r=>setTimeout(r,100)); }
-  if(!google.maps || !google.maps.DistanceMatrixService){ status.innerHTML='<span class="error">Google Maps API ยังโหลดไม่เสร็จ</span>'; return; }
-
-  const [lat,lng]=latlng.split(':').map(Number);
+  const [lat,lng] = latlng.split(':').map(Number);
+  if(!window.google || !google.maps || !google.maps.DistanceMatrixService){ status.innerHTML='<span class="error">Google Maps API ยังโหลดไม่เสร็จ</span>'; return; }
   status.textContent='กำลังคำนวณระยะทาง (ถนน)…';
-  const svc=new google.maps.DistanceMatrixService();
+  const svc = new google.maps.DistanceMatrixService();
   svc.getDistanceMatrix({
-    origins:[{lat:ORIGIN.lat,lng:ORIGIN.lng}],
-    destinations:[{lat,lng}],
+    origins: [{lat:ORIGIN.lat, lng:ORIGIN.lng}],
+    destinations: [{lat, lng}],
     travelMode: google.maps.TravelMode.DRIVING,
     unitSystem: google.maps.UnitSystem.METRIC
   }, (resp, statusCode)=>{
     if(statusCode!=='OK'){ status.innerHTML='<span class="error">ล้มเหลว: '+statusCode+'</span>'; return; }
-    const el=resp?.rows?.[0]?.elements?.[0];
+    const el = resp.rows?.[0]?.elements?.[0];
     if(!el || el.status!=='OK'){ status.innerHTML='<span class="error">ไม่มีผลลัพธ์: '+(el?.status||'NO_RESULT')+'</span>'; return; }
-    document.getElementById('distanceKm').value=(el.distance.value/1000).toFixed(2);
+    document.getElementById('distanceKm').value = (el.distance.value/1000).toFixed(2);
     status.textContent='คำนวณระยะทาง (ถนน) สำเร็จ ✅';
   });
 }
 
-/** ==================== ส่งข้อมูลไป Power Automate ==================== **/
+/** ====== ส่งข้อมูลไป Power Automate ====== **/
 document.getElementById('visitForm')?.addEventListener('submit', async (e)=>{
   e.preventDefault();
   const status=document.getElementById('status'); status.textContent='กำลังส่งข้อมูล… 🚚';
   if(staffList.length===0){ status.innerHTML='<span class="error">โปรดระบุชื่อพนักงานอย่างน้อย 1 คน</span>'; return; }
-  const payload={
+  const payload = {
     date: document.getElementById('date').value,
     team: document.getElementById('team').value,
     staffNames: staffList,
@@ -396,10 +377,11 @@ document.getElementById('visitForm')?.addEventListener('submit', async (e)=>{
     distanceKm: document.getElementById('distanceKm').value,
     thaiAddress: document.getElementById('thaiAddress').value,
     photosBase64: photosBase64,
-    secret: "nsb2b-2025" // ใส่ Condition เช็คใน Flow A
+    // secret แบบง่าย (ไปตั้ง Condition ตรวจใน Flow)
+    secret: "nsb2b-2025"
   };
   try{
-    const res=await fetch(FLOW_URL,{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+    const res = await fetch(FLOW_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
     if(!res.ok) throw new Error('HTTP '+res.status);
     status.innerHTML='<span class="success">ส่งสำเร็จ 🎉</span>';
     e.target.reset(); staffList=[]; staffChips.querySelectorAll('.chip').forEach(c=>c.remove()); photosBase64=[];
@@ -408,53 +390,71 @@ document.getElementById('visitForm')?.addEventListener('submit', async (e)=>{
   }catch(err){ status.innerHTML='<span class="error">ส่งไม่สำเร็จ: '+err.message+'</span>'; }
 });
 
-/** ==================== DATA LOADER (แผนที่/แดชบอร์ด) ==================== **/
-let cachedRecords=null;
+/** ====== DATA LOADER (ใช้สำหรับแผนที่/แดชบอร์ด) ====== **/
+let cachedRecords = null;
 // รูปแบบข้อมูลที่คาดหวัง: [{date, team, staffNamesText, siteName, customerName, thaiAddress, latlng}]
 async function loadData(){
   if(cachedRecords) return cachedRecords;
+  // 1) ถ้า DATA_URL ว่าง → ใช้ตัวอย่างในหน่วยความจำ
   if(!DATA_URL){
-    // ตัวอย่างข้อมูลโชว์แผนที่/แดชบอร์ด
-    cachedRecords=[
+    cachedRecords = [
       {date:'2025-10-01', team:'A', staffNamesText:'สมชาย', siteName:'บ้าน A', customerName:'ร้าน X', thaiAddress:'ตำบลบางรัก, อำเภอบางรัก, กรุงเทพมหานคร', latlng:'13.736717:100.523186'},
       {date:'2025-10-03', team:'B', staffNamesText:'วิชา', siteName:'โครงการ B', customerName:'บริษัท Y', thaiAddress:'ตำบลศาลายา, อำเภอพุทธมณฑล, นครปฐม', latlng:'13.803:100.327'},
       {date:'2025-10-05', team:'C', staffNamesText:'กานต์', siteName:'รีสอร์ท C', customerName:'คุณ Z', thaiAddress:'ตำบลหัวหิน, อำเภอหัวหิน, ประจวบคีรีขันธ์', latlng:'12.568:99.957'}
     ];
     return cachedRecords;
   }
-  const res = await fetch(DATA_URL); const text = await res.text();
-  try{ const json=JSON.parse(text); cachedRecords=Array.isArray(json)?json:(json.items||[]); return cachedRecords; }
-  catch(_){ const rows=text.trim().split(/\r?\n/).map(r=>r.split(',')); const head=rows.shift().map(h=>h.trim());
-    cachedRecords = rows.map(r=>{ const o={}; head.forEach((h,i)=>o[h]=(r[i]||'').trim()); return o; }); return cachedRecords; }
+  // 2) ถ้า DATA_URL ชี้ CSV หรือ JSON สาธารณะ
+  const res = await fetch(DATA_URL);
+  const text = await res.text();
+  try{ // JSON
+    const json = JSON.parse(text);
+    cachedRecords = Array.isArray(json) ? json : json.items || [];
+    return cachedRecords;
+  }catch(_){
+    // CSV แบบง่าย: header ต้องมี date,team,staffNamesText,siteName,customerName,thaiAddress,latlng
+    const rows = text.trim().split(/\r?\n/).map(r=>r.split(','));
+    const head = rows.shift().map(h=>h.trim());
+    cachedRecords = rows.map(r=>{
+      const o={}; head.forEach((h,i)=>o[h]= (r[i]||'').trim()); return o;
+    });
+    return cachedRecords;
+  }
 }
 
-/** ==================== MAP ==================== **/
+/** ====== MAP ====== **/
 let map, markers=[], myLocationMarker=null, mapInited=false;
 function initMapOnce(){
-  if(mapInited) return; mapInited=true;
-  if(!window.google || !google.maps){ alert('Google Maps API ยังโหลดไม่เสร็จ'); return; }
-  map = new google.maps.Map(document.getElementById('map'), { center:{lat:ORIGIN.lat,lng:ORIGIN.lng}, zoom:7, mapTypeControl:false, streetViewControl:false });
+  if(mapInited) return;
+  mapInited=true;
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat:ORIGIN.lat, lng:ORIGIN.lng}, zoom: 7, mapTypeControl:false, streetViewControl:false
+  });
   new google.maps.Marker({position:{lat:ORIGIN.lat,lng:ORIGIN.lng}, map, label:'🏠', title:'ศูนย์อ้างอิง'});
 }
 async function refreshMap(){
   if(!window.google || !google.maps){ alert('Google Maps API ยังโหลดไม่เสร็จ'); return; }
-  const from=document.getElementById('mapFrom').value||'0000-01-01';
-  const to  =document.getElementById('mapTo').value||'9999-12-31';
-  const team=document.getElementById('mapTeam').value||'';
-  const data=await loadData();
+  const from = document.getElementById('mapFrom').value || '0000-01-01';
+  const to = document.getElementById('mapTo').value || '9999-12-31';
+  const team = document.getElementById('mapTeam').value || '';
+  const data = await loadData();
+  // เคลียร์ marker เก่า
   markers.forEach(m=>m.setMap(null)); markers=[];
-  const filtered=data.filter(x=>{
-    const okDate=(!x.date || (x.date>=from && x.date<=to));
-    const okTeam=(!team || x.team===team);
+  const filtered = data.filter(x=>{
+    const okDate = (!x.date || (x.date>=from && x.date<=to));
+    const okTeam = (!team || x.team===team);
     return okDate && okTeam && x.latlng && x.latlng.includes(':');
   });
-  const bounds=new google.maps.LatLngBounds();
+  const bounds = new google.maps.LatLngBounds();
   filtered.forEach(r=>{
-    const [lat,lng]=r.latlng.split(':').map(Number);
-    const m=new google.maps.Marker({map, position:{lat,lng}});
-    const info=new google.maps.InfoWindow({content:`<div style="font-size:14px"><b>${r.siteName||'-'}</b><br>
-      ลูกค้า: ${r.customerName||'-'}<br>ทีม: ${r.team||'-'} · วันที่: ${r.date||'-'}<br>ที่อยู่: ${r.thaiAddress||'-'}</div>`});
-    m.addListener('click',()=>info.open({anchor:m,map}));
+    const [lat,lng] = r.latlng.split(':').map(Number);
+    const m = new google.maps.Marker({map, position:{lat,lng}});
+    const info = new google.maps.InfoWindow({content: `
+      <div style="font-size:14px"><b>${r.siteName||'-'}</b><br>
+      ลูกค้า: ${r.customerName||'-'}<br>
+      ทีม: ${r.team||'-'} · วันที่: ${r.date||'-'}<br>
+      ที่อยู่: ${r.thaiAddress||'-'}</div>`});
+    m.addListener('click', ()=>info.open({anchor:m,map}));
     markers.push(m); bounds.extend(m.getPosition());
   });
   if(filtered.length){ map.fitBounds(bounds); if(map.getZoom()>15) map.setZoom(15); }
@@ -462,41 +462,68 @@ async function refreshMap(){
 function locateOnMap(){
   if(!navigator.geolocation){ alert('อุปกรณ์ไม่รองรับตำแหน่ง'); return; }
   navigator.geolocation.getCurrentPosition(pos=>{
-    const p={lat:pos.coords.latitude, lng:pos.coords.longitude};
+    const p = {lat:pos.coords.latitude, lng:pos.coords.longitude};
     if(myLocationMarker) myLocationMarker.setMap(null);
-    myLocationMarker=new google.maps.Marker({map, position:p, label:'📍', title:'ตำแหน่งปัจจุบัน'});
+    myLocationMarker = new google.maps.Marker({map, position:p, label:'📍', title:'ตำแหน่งปัจจุบัน'});
     map.setCenter(p); map.setZoom(14);
   }, err=> alert('อ่านตำแหน่งไม่สำเร็จ: '+err.message), {enableHighAccuracy:true, timeout:10000});
 }
 
-/** ==================== DASHBOARD ==================== **/
+/** ====== DASHBOARD ====== **/
 function splitThaiAddress(addr){
-  const parts=(addr||'').split(',').map(s=>s.trim());
-  return { tambon:parts[0]||'', amphoe:parts[1]||'', changwat:parts[2]||'' };
+  // คาดหวังรูปแบบ "ตำบล…, อำเภอ…, จังหวัด…"
+  const parts = (addr||'').split(',').map(s=>s.trim());
+  return {
+    tambon: parts[0]||'',
+    amphoe: parts[1]||'',
+    changwat: parts[2]||''
+  };
 }
 async function buildFilters(){
-  const data=await loadData(); const setC=new Set(), setA=new Set(), setT=new Set();
-  data.forEach(r=>{ const {changwat,amphoe,tambon}=splitThaiAddress(r.thaiAddress||'');
-    if(changwat) setC.add(changwat); if(amphoe) setA.add(amphoe); if(tambon) setT.add(tambon); });
-  fillSelect('filterChangwat',setC); fillSelect('filterAmphoe',setA); fillSelect('filterTambon',setT);
+  const data = await loadData();
+  // สร้างเซ็ตค่าที่ไม่ว่าง
+  const setC=new Set(), setA=new Set(), setT=new Set();
+  data.forEach(r=>{
+    const {changwat, amphoe, tambon} = splitThaiAddress(r.thaiAddress||'');
+    if(changwat) setC.add(changwat);
+    if(amphoe) setA.add(amphoe);
+    if(tambon) setT.add(tambon);
+  });
+  fillSelect('filterChangwat', setC);
+  fillSelect('filterAmphoe', setA);
+  fillSelect('filterTambon', setT);
 }
-function fillSelect(id,set){ const el=document.getElementById(id); const cur=el.value;
-  el.innerHTML='<option value="">ทั้งหมด</option>'+Array.from(set).sort().map(v=>`<option>${v}</option>`).join('');
+function fillSelect(id, set){
+  const el=document.getElementById(id); const cur=el.value;
+  el.innerHTML='<option value="">ทั้งหมด</option>' + Array.from(set).sort().map(v=>`<option>${v}</option>`).join('');
+  // พยายามคงค่าที่เลือกไว้
   if(cur && Array.from(set).includes(cur)) el.value=cur;
 }
 async function refreshDashboard(){
-  const data=await loadData();
-  const fC=document.getElementById('filterChangwat').value||'';
-  const fA=document.getElementById('filterAmphoe').value||'';
-  const fT=document.getElementById('filterTambon').value||'';
-  const filtered=data.filter(r=>{ const {changwat,amphoe,tambon}=splitThaiAddress(r.thaiAddress||'');
-    return (!fC||changwat===fC)&&(!fA||amphoe===fA)&&(!fT||tambon===fT); });
-  const agg={};
-  filtered.forEach(r=>{ const {changwat,amphoe,tambon}=splitThaiAddress(r.thaiAddress||'');
-    const k=[changwat||'-',amphoe||'-',tambon||'-'].join('|'); agg[k]=(agg[k]||0)+1; });
-  const rows=Object.entries(agg).map(([k,n])=>{ const [c,a,t]=k.split('|'); return {c,a,t,n}; }).sort((x,y)=>y.n-x.n);
-  document.getElementById('dashSummary').innerText=`รวม ${filtered.length} ครั้ง · กลุ่มที่เจอบ่อยสุด ${rows[0]? rows[0].c+'/'+rows[0].a+'/'+rows[0].t+' ('+rows[0].n+' ครั้ง)':'-'}`;
-  const tbody=document.querySelector('#dashTable tbody'); tbody.innerHTML= rows.map(r=>`<tr><td>${r.c}</td><td>${r.a}</td><td>${r.t}</td><td>${r.n}</td></tr>`).join('') || '<tr><td colspan="4">ไม่มีข้อมูล</td></tr>';
+  const data = await loadData();
+  const fC = document.getElementById('filterChangwat').value||'';
+  const fA = document.getElementById('filterAmphoe').value||'';
+  const fT = document.getElementById('filterTambon').value||'';
+  const filtered = data.filter(r=>{
+    const {changwat, amphoe, tambon} = splitThaiAddress(r.thaiAddress||'');
+    const okC = !fC || changwat===fC;
+    const okA = !fA || amphoe===fA;
+    const okT = !fT || tambon===fT;
+    return okC && okA && okT;
+  });
+  // สรุปจำนวนตาม จ/อ/ต (ตามฟิลด์ที่มี)
+  const agg = {};
+  filtered.forEach(r=>{
+    const {changwat, amphoe, tambon} = splitThaiAddress(r.thaiAddress||'');
+    const k = [changwat||'-', amphoe||'-', tambon||'-'].join('|');
+    agg[k] = (agg[k]||0)+1;
+  });
+  const rows = Object.entries(agg).map(([k,n])=>{
+    const [c,a,t] = k.split('|'); return {c,a,t,n};
+  }).sort((x,y)=> y.n - x.n);
+
+  document.getElementById('dashSummary').innerText = `รวม ${filtered.length} ครั้ง · กลุ่มที่เจอบ่อยสุด ${rows[0]? rows[0].c+'/'+rows[0].a+'/'+rows[0].t+' ('+rows[0].n+' ครั้ง)' : '-'}`;
+  const tbody=document.querySelector('#dashTable tbody'); tbody.innerHTML = rows.map(r=>`<tr><td>${r.c}</td><td>${r.a}</td><td>${r.t}</td><td>${r.n}</td></tr>`).join('') || '<tr><td colspan="4">ไม่มีข้อมูล</td></tr>';
 }
 </script>
 </body>
