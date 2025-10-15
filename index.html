@@ -66,7 +66,7 @@
     <div class="brand"><img src="assets/dohome_logo.jpg" alt="DoHome logo"></div>
     <div>
       <h1>NS Small B2B <span class="tag">✨</span></h1>
-      <div class="ribbon"> ดูโฮม นครสวรรค์ v.3 </div>
+      <div class="ribbon"> ดูโฮม นครสวรรค์ v.3.2 </div>
     </div>
   </header>
 
@@ -399,7 +399,14 @@ document.getElementById('visitForm')?.addEventListener('submit', async (e)=>{
     secret: "nsb2b-2025" // ใส่ Condition เช็คใน Flow A
   };
   try{
-    const res=await fetch(FLOW_URL,{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+    const res = await fetch(FLOW_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-nsb2b-secret': 'nsb2b-2025'   // << เพิ่มบรรทัดนี้
+  },
+  body: JSON.stringify(payload)
+});
     if(!res.ok) throw new Error('HTTP '+res.status);
     status.innerHTML='<span class="success">ส่งสำเร็จ 🎉</span>';
     e.target.reset(); staffList=[]; staffChips.querySelectorAll('.chip').forEach(c=>c.remove()); photosBase64=[];
